@@ -2,9 +2,11 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const authRoute = require('./routes/auth');
+const jobRoute = require('./routes/job');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const authMiddleware = require('./middleware/auth');
 dotenv.config();
 const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -24,7 +26,7 @@ app.use((req, res, next) => {
     next();
 });
 
-
+app.use('/v1/job', authMiddleware, jobRoute);
 app.use('/v1/auth', authRoute);
 app.use((err, req, res, next) => {
     const reqString = `${req.method} ${req.url} ${Date.now()} ${err.message}\n`;

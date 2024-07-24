@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     res.send('login page');
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
     try {
         const { name, email, password } = req.body;
         const userExists = await User.findOne({ email });
@@ -31,7 +31,7 @@ router.post('/register', async (req, res) => {
         })
     }
     catch (e) {
-        return new Error(e.message);
+        next(e);
     }
 });
 router.post('/login', async (req, res) => {
