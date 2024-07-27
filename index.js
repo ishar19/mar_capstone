@@ -7,6 +7,10 @@ const fs = require('fs');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const authMiddleware = require('./middleware/auth');
+const cors = require('cors');
+app.use(cors({
+    origin: "*"
+}));
 dotenv.config();
 const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: false }))

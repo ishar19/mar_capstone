@@ -3,15 +3,16 @@ const router = express.Router();
 const User = require('../schema/user.schema');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const saltRounds = 10;
 router.get('/', (req, res) => {
-    throw new Error('This is a forced error');
     res.send('login page');
 });
 
 router.post('/register', async (req, res, next) => {
+    const saltRounds = 10;
+
     try {
         const { name, email, password } = req.body;
+        console.log(req.body);
         const userExists = await User.findOne({ email });
         if (userExists) {
             return res.status(400).send('User already exists');
