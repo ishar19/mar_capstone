@@ -3,7 +3,7 @@ const router = express.Router();
 const jobSchema = require('../schema/job.schema');
 
 
-router.post('/', async (req, res, next) => {
+router.post('', async (req, res, next) => {
     try {
         const jobInfo = req.body;
         const skills = jobInfo?.skills?.split(',') || [];  // splits the string into an array of strings
