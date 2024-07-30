@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const jobSchema = require('../schema/job.schema');
+const authMiddleware = require('../middleware/auth');
 
-
-router.post('', async (req, res, next) => {
+router.post('', authMiddleware, async (req, res, next) => {
     try {
         const jobInfo = req.body;
         const skills = jobInfo?.skills?.split(',') || [];  // splits the string into an array of strings
@@ -39,7 +39,7 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', authMiddleware, async (req, res, next) => {
     try {
         const id = req.params.id;
         const job = await jobSchema.findById(id);
@@ -60,7 +60,7 @@ router.delete('/:id', async (req, res, next) => {
 });
 
 
-router.post("/:id", async (req, res, next) => {
+router.post("/:id", authMiddleware, async (req, res, next) => {
     try {
         const id = req.params.id;
         const job = await jobSchema.findById(id);
@@ -81,7 +81,7 @@ router.post("/:id", async (req, res, next) => {
             runValidators: true,   // run the schema validators on the updated document
             new: true  // return the updated document instead of the original
         });
-        res.status(200).json(updatedJob);
+        res.status(201).json(updatedJob);
     }
     catch (e) {
         next(e);
@@ -93,7 +93,7 @@ router.post("/:id", async (req, res, next) => {
 // 3. filter by keywords 
 
 
-router.get('/', async (req, res, next) => {
+router.get('', async (req, res, next) => {
     try {
         const { skills } = req.query;  // skills filter or keywords query
         const filter = {};

@@ -30,7 +30,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/v1/job', authMiddleware, jobRoute);
+app.use('/v1/job', jobRoute);
 app.use('/v1/auth', authRoute);
 app.use((err, req, res, next) => {
     const reqString = `${req.method} ${req.url} ${Date.now()} ${err.message}\n`;

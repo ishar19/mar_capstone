@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../schema/user.schema');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const authMiddleware = require('../middleware/auth');
 router.get('/', (req, res) => {
     res.send('login page');
 });
@@ -85,6 +86,20 @@ router.post("/updatePassword", async (req, res) => {
     }
 });
 
-
+router.post("/verify", async (req, res, next) => {
+    try {
+        const token = req.headers['authorization'];
+        const verifiedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+        const userId = verifiedToken._id;
+        const user = await User.findById(userId);
+        res.json({
+            email: user.email,
+            name: user.name
+        })
+    }
+    catch (e) {
+        next(e);
+    }
+})
 
 module.exports = router;
